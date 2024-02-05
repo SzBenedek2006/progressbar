@@ -23,6 +23,7 @@ int main() {
     int length = 50;
     for (i = 0; i <= max_value; i++) {
         progressbar(i, max_value, length);
+        usleep(100000);
     }
     printf("\n");
 
