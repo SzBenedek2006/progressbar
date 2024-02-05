@@ -3,4 +3,8 @@ Efficient progressbar in C
 
 
 
-# I will make a library out of this
+## Why?
+
+Just for fun aand...
+
+_I will make a library out of this BTW._
