@@ -7,4 +7,4 @@ Efficient progressbar in C
 
 Just for fun aand...
 
-_I will make a library out of this BTW._
+_I will make a library out of this and use it in all kinds of projects._
