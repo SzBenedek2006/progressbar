@@ -2,6 +2,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+
+
+
 const unsigned short int needAveraging = 25; // Yeah, I'm bad at naming stuff
 
 double time1 = 0;
@@ -208,6 +211,9 @@ void* multiThreadedProgressbar(void* arg) {
     while(args->progress <= args->total) {
         struct ProgressBarArgs *args = (struct ProgressBarArgs *)arg;
         progressbar(args->progress, args->total, args->length, args->time);
+        if (args->progress == args->total) {
+            break;
+        }
         usleep(100);
     }
 

@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include "progressbar.c"
 
+const int MS = 1000;
+
 int main() {
 
     pthread_t progressThread;
@@ -31,7 +33,7 @@ int main() {
         args->time = 0;
 
 
-        usleep(100000);
+        usleep(150*MS);
     }
     pthread_join(progressThread, NULL);
     printf("\n");
