@@ -1,11 +1,6 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <pthread.h> // Need to include here too.
-
-
-pthread_mutex_t mutex; // Declare global variable in a place that is accessible to both files.s
-
+#include <unistd.h>
 
 const unsigned short int needAveraging = 25; // Yeah, I'm bad at naming stuff
 
@@ -25,12 +20,11 @@ unsigned int eta7 = 0;
 short unsigned int counter;
 
 struct ProgressBarArgs {
-        int progress;
-        int total;
-        int length;
-        double time;
-    };
-
+    int progress;
+    int total;
+    int length;
+    double time;
+};
 
 struct Time {
     int hours;
@@ -38,7 +32,8 @@ struct Time {
     int seconds;
 };
 
-struct Time convertSeconds(int total_seconds) {
+struct Time convertSeconds(int total_seconds)
+{
     struct Time time;
 
     time.hours = total_seconds / 3600; // Calculate hours
@@ -48,14 +43,14 @@ struct Time convertSeconds(int total_seconds) {
     return time; // Return the struct with converted time values
 }
 
-void remainingTime(double time, double* time1, double* time2, unsigned int* tCounter, int total, int progress) {
+void remainingTime(double time, double* time1, double* time2, unsigned int* tCounter, int total, int progress)
+{
 
     if (*tCounter == 1) {
         *time1 = time;
     } else {
         *time2 = time;
     }
-
 
     // Latest stuff... first 3 time incorrect
     if (total <= needAveraging) {
@@ -140,8 +135,6 @@ void remainingTime(double time, double* time1, double* time2, unsigned int* tCou
         }
     }
 
-
-
     if (*tCounter == 2) {
         *tCounter = 1;
     } else {
@@ -149,14 +142,10 @@ void remainingTime(double time, double* time1, double* time2, unsigned int* tCou
     }
 }
 
-
-
-void progressbar(int progress, int total, int length, double time) { // For single threaded use:
-
-
+void progressbar(int progress, int total, int length, double time)
+{ // For single threaded use:
 
     *(&counter) = (int)((float)progress / total * 100) % 4; // Counts 0 -> 3 without additional variable added
-
 
     struct Time realTime = convertSeconds(eta); // Update eta before this point!!!
 
@@ -207,21 +196,16 @@ void progressbar(int progress, int total, int length, double time) { // For sing
     }
 }
 
-void* multiThreadedProgressbar(void* arg) {
+void* multiThreadedProgressbar(void* arg)
+{
 
-    struct ProgressBarArgs *args = (struct ProgressBarArgs *)arg;
-    while(args->progress <= args->total) {
-        pthread_mutex_lock(&mutex);
-        struct ProgressBarArgs *args = (struct ProgressBarArgs *)arg;
-
+    struct ProgressBarArgs* args = (struct ProgressBarArgs*)arg;
+    while (args->progress <= args->total) {
+        struct ProgressBarArgs* args = (struct ProgressBarArgs*)arg;
         progressbar(args->progress, args->total, args->length, args->time);
-        // If here happens an increment in progress, it breaks at 99%, except when using mutexes.
         if (args->progress == args->total) {
             break;
         }
-
-        pthread_mutex_unlock(&mutex);
-
         usleep(100);
     }
 
