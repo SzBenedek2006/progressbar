@@ -29,7 +29,8 @@ struct ProgressBarArgs {
         int total;
         int length;
         double time;
-    };
+};
+
 
 
 struct Time {
@@ -180,7 +181,7 @@ void progressbar(int progress, int total, int length, double time) { // For sing
         if (((progress == 1 || progress == 2) && total <= needAveraging) || ((progress == 1 || progress == 2 || progress == 3 || progress == 4 || progress == 5) && total >= needAveraging)) { // This is the first run
             printf("] %.0f%% eta: calc...", progressPercent);
         } else {
-            printf("] %.0f%% eta: %02d:%02d:%02d", progressPercent, realTime.hours, realTime.minutes, realTime.seconds);
+            printf("] %.0f%% eta: %02d:%02d:%02d    %d", progressPercent, realTime.hours, realTime.minutes, realTime.seconds, progress);
         }
 
         fflush(stdout);
@@ -214,8 +215,10 @@ void* multiThreadedProgressbar(void* arg) {
         pthread_mutex_lock(&mutex);
 
         progressbar(args->progress, args->total, args->length, args->time);
-        // If here happens an increment in progress, it breaks at 99%, except when using mutexes.
+        // If here happens an increment in progress, it breaks at 99%, even when using mutexes.
         if (args->progress == args->total) {
+            progressbar(args->progress, args->total, args->length, args->time);
+            pthread_mutex_unlock(&mutex);
             break;
         }
 
