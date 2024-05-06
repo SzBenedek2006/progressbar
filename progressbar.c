@@ -210,7 +210,7 @@ void progressbar(int progress, int total, int length, double time) { // For sing
 void* multiThreadedProgressbar(void* arg) {
 
     struct ProgressBarArgs *args = (struct ProgressBarArgs *)arg;
-    while(args->progress <= args->total) {
+    while(1) {
         pthread_mutex_lock(&mutex);
 
         progressbar(args->progress, args->total, args->length, args->time);
@@ -223,6 +223,7 @@ void* multiThreadedProgressbar(void* arg) {
 
         usleep(100);
     }
+
 
     return NULL;
 }
