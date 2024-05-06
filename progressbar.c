@@ -220,7 +220,7 @@ void* multiThreadedProgressbar(void* arg) {
         }
 
         pthread_mutex_unlock(&mutex);
-
+        fflush(stdout);
         usleep(100);
     }
 
