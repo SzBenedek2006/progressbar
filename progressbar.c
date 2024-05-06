@@ -212,7 +212,6 @@ void* multiThreadedProgressbar(void* arg) {
     struct ProgressBarArgs *args = (struct ProgressBarArgs *)arg;
     while(args->progress <= args->total) {
         pthread_mutex_lock(&mutex);
-        struct ProgressBarArgs *args = (struct ProgressBarArgs *)arg;
 
         progressbar(args->progress, args->total, args->length, args->time);
         // If here happens an increment in progress, it breaks at 99%, except when using mutexes.
